@@ -46,7 +46,7 @@ def health():
 def llm_test():
     from .llm import groq_chat
     try:
-        t, u = groq_chat([{"role": "user", "content": "Reply with the single word: ready"}], max_tokens=10)
+        t, u = groq_chat([{"role": "user", "content": "Reply with the single word: ready"}], max_tokens=300)
         return {"ok": True, "reply": t, "model": u.get("model")}
     except Exception as e:
         return {"ok": False, "error": str(e)[:400]}
