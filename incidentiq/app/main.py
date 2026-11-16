@@ -42,6 +42,15 @@ def health():
     n = len(STATE["index"].docs) if STATE["index"] else 0
     return {"status": "ok", "indexed": n, "llm_configured": bool(os.getenv("GROQ_API_KEY"))}
 
+@app.get("/llm-test")
+def llm_test():
+    from .llm import groq_chat
+    try:
+        t, u = groq_chat([{"role": "user", "content": "Reply with the single word: ready"}], max_tokens=10)
+        return {"ok": True, "reply": t, "model": u.get("model")}
+    except Exception as e:
+        return {"ok": False, "error": str(e)[:400]}
+
 @app.post("/search")
 def search(q: Q):
     i, rw, hits, trace, ms = _search(q)
