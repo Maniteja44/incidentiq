@@ -1,0 +1,282 @@
+[
+ {
+  "id": "q01",
+  "type": "exact",
+  "query": "POSTGRES_DEADLOCK",
+  "expected_error_id": "POSTGRES_DEADLOCK",
+  "expect_abstain": false
+ },
+ {
+  "id": "q02",
+  "type": "exact",
+  "query": "K8S_OOMKILLED exitCode=137",
+  "expected_error_id": "K8S_OOMKILLED",
+  "expect_abstain": false
+ },
+ {
+  "id": "q03",
+  "type": "exact",
+  "query": "what does SQLSTATE 23505 mean in users_email_key",
+  "expected_error_id": "POSTGRES_UNIQUE_VIOLATION",
+  "expect_abstain": false
+ },
+ {
+  "id": "q04",
+  "type": "exact",
+  "query": "QDRANT_VECTOR_DIMENSION expected dim: 768, got 1536",
+  "expected_error_id": "QDRANT_VECTOR_DIMENSION",
+  "expect_abstain": false
+ },
+ {
+  "id": "q05",
+  "type": "exact",
+  "query": "ModuleNotFoundError: No module named \"pydantic_settings\"",
+  "expected_error_id": "PYTHON_MODULE_NOT_FOUND",
+  "expect_abstain": false
+ },
+ {
+  "id": "q06",
+  "type": "exact",
+  "query": "OSError: [Errno 28] No space left on device",
+  "expected_error_id": "DISK_NO_SPACE",
+  "expect_abstain": false
+ },
+ {
+  "id": "q07",
+  "type": "exact",
+  "query": "TLS_CERT_EXPIRED",
+  "expected_error_id": "TLS_CERT_EXPIRED",
+  "expect_abstain": false
+ },
+ {
+  "id": "q08",
+  "type": "exact",
+  "query": "Error loading ASGI app. Could not import module \"app.main\"",
+  "expected_error_id": "UVICORN_IMPORT_ERROR",
+  "expect_abstain": false
+ },
+ {
+  "id": "q09",
+  "type": "exact",
+  "query": "json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)",
+  "expected_error_id": "JSON_DECODE",
+  "expect_abstain": false
+ },
+ {
+  "id": "q10",
+  "type": "exact",
+  "query": "ImagePullBackOff registry.example/orders:1.4.2",
+  "expected_error_id": "K8S_IMAGE_PULL",
+  "expect_abstain": false
+ },
+ {
+  "id": "q11",
+  "type": "paraphrase",
+  "query": "two transactions are blocking each other and the database killed one",
+  "expected_error_id": "POSTGRES_DEADLOCK",
+  "expect_abstain": false
+ },
+ {
+  "id": "q12",
+  "type": "paraphrase",
+  "query": "pod keeps restarting over and over and never becomes ready",
+  "expected_error_id": "K8S_CRASHLOOP",
+  "expect_abstain": false
+ },
+ {
+  "id": "q13",
+  "type": "paraphrase",
+  "query": "the database says there are no more client slots available",
+  "expected_error_id": "POSTGRES_TOO_MANY_CONNECTIONS",
+  "expect_abstain": false
+ },
+ {
+  "id": "q14",
+  "type": "paraphrase",
+  "query": "cache refuses to write because it ran out of its memory budget",
+  "expected_error_id": "REDIS_OOM",
+  "expect_abstain": false
+ },
+ {
+  "id": "q15",
+  "type": "paraphrase",
+  "query": "our service cannot translate a hostname into an address",
+  "expected_error_id": "DNS_LOOKUP_FAILURE",
+  "expect_abstain": false
+ },
+ {
+  "id": "q16",
+  "type": "paraphrase",
+  "query": "the https handshake fails because the server certificate is out of date",
+  "expected_error_id": "TLS_CERT_EXPIRED",
+  "expect_abstain": false
+ },
+ {
+  "id": "q17",
+  "type": "paraphrase",
+  "query": "provider is telling us we are sending requests too fast",
+  "expected_error_id": "HTTP_RATE_LIMIT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q18",
+  "type": "paraphrase",
+  "query": "app cannot write an uploaded file because of access rights",
+  "expected_error_id": "FILE_PERMISSION_DENIED",
+  "expect_abstain": false
+ },
+ {
+  "id": "q19",
+  "type": "paraphrase",
+  "query": "the reverse proxy waited too long for the backend to answer",
+  "expected_error_id": "NGINX_GATEWAY_TIMEOUT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q20",
+  "type": "paraphrase",
+  "query": "vector database refuses connections on its port",
+  "expected_error_id": "QDRANT_CONNECT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q21",
+  "type": "multi_clue",
+  "query": "auth-api staging uvicorn can't load the application module",
+  "expected_error_id": "UVICORN_IMPORT_ERROR",
+  "expect_abstain": false
+ },
+ {
+  "id": "q22",
+  "type": "multi_clue",
+  "query": "orders-api staging connection pool exhausted, checkout timed out after 30 seconds",
+  "expected_error_id": "SQLALCHEMY_POOL_TIMEOUT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q23",
+  "type": "multi_clue",
+  "query": "gateway production deadlock detected on postgres",
+  "expected_error_id": "POSTGRES_DEADLOCK",
+  "expect_abstain": false
+ },
+ {
+  "id": "q24",
+  "type": "multi_clue",
+  "query": "document-worker production request to embed endpoint timed out",
+  "expected_error_id": "REQUESTS_TIMEOUT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q25",
+  "type": "multi_clue",
+  "query": "embedding-worker production container restarted with back-off",
+  "expected_error_id": "K8S_CRASHLOOP",
+  "expect_abstain": false
+ },
+ {
+  "id": "q26",
+  "type": "multi_clue",
+  "query": "orders-api production qdrant connection refused port 6333",
+  "expected_error_id": "QDRANT_CONNECT",
+  "expect_abstain": false
+ },
+ {
+  "id": "q27",
+  "type": "multi_clue",
+  "query": "gateway production 502 upstream closed connection while reading response header",
+  "expected_error_id": "NGINX_BAD_GATEWAY",
+  "expect_abstain": false
+ },
+ {
+  "id": "q28",
+  "type": "multi_clue",
+  "query": "embedding-worker staging inference upstream returned 503",
+  "expected_error_id": "HTTP_UPSTREAM_503",
+  "expect_abstain": false
+ },
+ {
+  "id": "q29",
+  "type": "multi_clue",
+  "query": "auth-api production redis error 111 connection refused",
+  "expected_error_id": "REDIS_CONNECTION_REFUSED",
+  "expect_abstain": false
+ },
+ {
+  "id": "q30",
+  "type": "multi_clue",
+  "query": "document-worker staging cannot parse response, html instead of json",
+  "expected_error_id": "JSON_DECODE",
+  "expect_abstain": false
+ },
+ {
+  "id": "q31",
+  "type": "unanswerable",
+  "query": "how do I bake sourdough bread",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q32",
+  "type": "unanswerable",
+  "query": "error",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q33",
+  "type": "unanswerable",
+  "query": "something is broken please fix",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q34",
+  "type": "unanswerable",
+  "query": "MongoDB replica set election failed",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q35",
+  "type": "unanswerable",
+  "query": "Kafka consumer lag is increasing",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q36",
+  "type": "unanswerable",
+  "query": "why is my laptop battery draining",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q37",
+  "type": "unanswerable",
+  "query": "what is the CEO's salary",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q38",
+  "type": "unanswerable",
+  "query": "GraphQL schema stitching conflict",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q39",
+  "type": "unanswerable",
+  "query": "Terraform state lock error",
+  "expected_error_id": null,
+  "expect_abstain": true
+ },
+ {
+  "id": "q40",
+  "type": "unanswerable",
+  "query": "how do I reset my gmail password",
+  "expected_error_id": null,
+  "expect_abstain": true
+ }
+]

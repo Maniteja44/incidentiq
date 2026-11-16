@@ -1,0 +1,44 @@
+{
+ "dense_only": {
+  "recall@5": 0.933,
+  "mrr@10": 0.917,
+  "ndcg@10": 0.921,
+  "abstention_accuracy": 1.0,
+  "recall@5_by_type": {
+   "exact": 1.0,
+   "paraphrase": 0.8,
+   "multi_clue": 1.0
+  },
+  "latency_ms_p50": 16.4,
+  "latency_ms_p95": 18.7,
+  "llm_cost_usd": 0.0
+ },
+ "bm25_dense_rrf": {
+  "recall@5": 0.933,
+  "mrr@10": 0.917,
+  "ndcg@10": 0.909,
+  "abstention_accuracy": 1.0,
+  "recall@5_by_type": {
+   "exact": 1.0,
+   "paraphrase": 0.8,
+   "multi_clue": 1.0
+  },
+  "latency_ms_p50": 17.8,
+  "latency_ms_p95": 18.6,
+  "llm_cost_usd": 0.0
+ },
+ "rewrite_hybrid_rerank": {
+  "recall@5": 0.933,
+  "mrr@10": 0.872,
+  "ndcg@10": 0.889,
+  "abstention_accuracy": 1.0,
+  "recall@5_by_type": {
+   "exact": 1.0,
+   "paraphrase": 0.8,
+   "multi_clue": 1.0
+  },
+  "latency_ms_p50": 14.8,
+  "latency_ms_p95": 15.7,
+  "llm_cost_usd": 0.0
+ }
+}

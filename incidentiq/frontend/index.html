@@ -1,0 +1,34 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>IncidentIQ</title>
+<style>
+:root{--bg:#f6f7f9;--fg:#1c2128;--card:#fff;--mut:#6b7280;--ac:#2563eb;--bd:#e5e7eb}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1318;--fg:#e6e8eb;--card:#181d24;--mut:#9aa3af;--ac:#60a5fa;--bd:#2a313b}}
+body{margin:0;font:15px/1.5 system-ui,sans-serif;background:var(--bg);color:var(--fg)}
+main{max-width:860px;margin:0 auto;padding:16px}
+h1{font-size:20px}.card{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:14px;margin:12px 0}
+textarea{width:100%;box-sizing:border-box;padding:10px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg);font:inherit}
+button,select{padding:8px 14px;border-radius:8px;border:1px solid var(--bd);background:var(--ac);color:#fff;font:inherit;cursor:pointer}select{background:var(--card);color:var(--fg)}
+pre{white-space:pre-wrap;word-break:break-word;margin:0}.mut{color:var(--mut);font-size:13px}.warn{color:#d97706}
+details{margin-top:8px}table{border-collapse:collapse;width:100%;font-size:13px}td,th{border-bottom:1px solid var(--bd);padding:4px 6px;text-align:left}
+</style></head><body><main>
+<h1>IncidentIQ <span class="mut">read-only incident assistant</span></h1>
+<div class="card"><label class="mut">Backend URL</label> <input id="base" style="width:70%;padding:6px;border-radius:8px;border:1px solid var(--bd);background:var(--card);color:var(--fg)" placeholder="https://your-service.onrender.com"> <button id="save">Save</button> <span id="st" class="mut"></span></div>
+<div class="card"><textarea id="q" rows="3" placeholder="Paste an error, e.g. QueuePool limit of size 5 overflow 10 reached in auth-api production"></textarea>
+<p><button id="go">Ask</button> <select id="mode"><option value="full">rewrite+hybrid+rerank</option><option value="rrf">BM25+dense+RRF</option><option value="dense">dense only</option><option value="bm25">BM25 only</option></select></p></div>
+<div id="out"></div>
+<script>
+const $=id=>document.getElementById(id),B=()=>{let v='';try{v=localStorage.getItem('iq_base')||''}catch(e){}return v.replace(/\/$/,'')},esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+$('base').value=B();
+$('save').onclick=async()=>{try{localStorage.setItem('iq_base',$('base').value.trim())}catch(e){}chk()};
+async function chk(){try{const j=await (await fetch(B()+'/health')).json();$('st').textContent='connected - '+j.indexed+' docs indexed'}catch(e){$('st').textContent='cannot reach backend (free servers can take ~60s to wake; retry)'}}
+chk();
+$('go').onclick=async()=>{const query=$('q').value.trim();if(!query)return;$('out').innerHTML='<div class="card mut">Working…</div>';
+ const r=await fetch(B()+'/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,mode:$('mode').value})});
+ if(!r.ok){$('out').innerHTML='<div class="card warn">Backend error '+r.status+'</div>';return}const j=await r.json();let h='';
+ h+=`<div class="card">${j.abstained?'<b class="warn">Insufficient evidence</b><br>':''}<pre>${esc(j.answer)}</pre><p class="mut">latency ${j.latency_ms}ms + retrieval ${j.retrieval_ms}ms · LLM: ${j.llm_used?'Groq':'not used'} · tokens ${j.usage.total_tokens||0}</p>
+ <button onclick="fb(true)">Helpful</button> <button onclick="fb(false)" style="background:#6b7280">Not helpful</button></div>`;
+ if(j.occurrences){const o=j.occurrences;h+=`<div class="card"><b>Where it occurred</b> — ${o.error_id}: ${o.count} events, ${o.first_seen} → ${o.last_seen}<table><tr><th>service</th><th>env</th><th>count</th></tr>${o.by_service_env.map(x=>`<tr><td>${x.service}</td><td>${x.environment}</td><td>${x.count}</td></tr>`).join('')}</table>
+ <details><summary>Most recent events</summary><table><tr><th>time</th><th>service</th><th>env</th><th>trace_id</th><th>line</th></tr>${o.recent.map(x=>`<tr><td>${x.timestamp}</td><td>${x.service}</td><td>${x.environment}</td><td>${x.trace_id}</td><td>${x.line}</td></tr>`).join('')}</table></details></div>`}
+ h+=`<div class="card"><b>Citations</b>${j.citations.map(c=>`<details><summary>[${c.tag}] ${c.id}</summary><pre>${esc(c.text)}</pre>${c.source_url?`<a href="${c.source_url}" target="_blank" rel="noopener">source</a> <span class="mut">(${c.source_status})</span>`:''}</details>`).join('')||'<span class="mut">none</span>'}</div>`;
+ h+=`<div class="card"><details><summary>Retrieval trace</summary><pre>${esc(JSON.stringify({rewrite:j.rewrite,trace:j.trace,hits:j.hits},null,1))}</pre></details></div>`;
+ $('out').innerHTML=h;window.fb=h=>fetch(B()+'/feedback',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({query,helpful:h})}).then(()=>alert('Thanks'))};
+</script></main></body></html>

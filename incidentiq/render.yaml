@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: incidentiq-api
+    runtime: docker
+    healthCheckPath: /health
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: ADMIN_TOKEN
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: "*"
