@@ -2,15 +2,15 @@ import os, numpy as np
 
 class LiteEmbedder:
     """Local dense embedder: char n-gram TF-IDF -> LSA (SVD). No downloads."""
-    def __init__(self, dim=192):
+    def __init__(self, dim=128):
         self.dim = dim
     def fit(self, texts):
         from sklearn.feature_extraction.text import TfidfVectorizer
         from sklearn.decomposition import TruncatedSVD
-        self.tf = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 5), sublinear_tf=True, lowercase=True)
+        self.tf = TfidfVectorizer(analyzer="char_wb", ngram_range=(3, 4), sublinear_tf=True, lowercase=True, max_features=15000, dtype=np.float32)
         X = self.tf.fit_transform(texts)
         k = max(2, min(self.dim, X.shape[0] - 1, X.shape[1] - 1))
-        self.svd = TruncatedSVD(n_components=k, random_state=0).fit(X)
+        self.svd = TruncatedSVD(n_components=k, n_iter=3, random_state=0).fit(X)
         return self
     def encode(self, texts):
         V = self.svd.transform(self.tf.transform(texts))
